@@ -2,10 +2,13 @@ language: go
 
 services:
   - docker
-
-before_install:
-  - cd flakyhost && docker image build --tag flakyhost . && cd ..
-  - cd alertlogger && docker image build --tag alertlogger . && cd ..
+  
 script: 
-  - cd flakyhost && go test -v ./... && cd ..
-  - cd alertlogger && go test -v ./... && cd ..
+  - echo "Tesing & Building FlakyHost code"
+  - cd flakyhost 
+  - go test -v ./...
+  - docker image build --tag flakyhost .
+  - echo "Tesing & Building AlertLogges code"
+  - cd ../alertlogger 
+  - go test -v ./...
+  - docker image build --tag alertlogger .

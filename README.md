@@ -33,7 +33,7 @@ Then, make sure you have [docker-compose](https://docs.docker.com/compose/) (and
     >>> keep an eye on the logs coming out over the alertmanager
     $ tail -f data/alertlogger/alerts.log
 
-## Looking at the metrics
+## Looking at metrics
 
 Then go to http://localhost:9090/alerts in your browser to see what, if any hosts are alerting.
 
@@ -56,9 +56,11 @@ You can also see the other metrics that are tracked.
 
 ![response_time_graph](PrometheusGraph.png)
 
-These metrics could easily be added to a Grafana dashboard, as it has excellent Prometheus support.
+These metrics could easily be added to a Grafana dashboard, as it has excellent Prometheus support. 
+See [How Prometheus and the blackbox exporter makes monitoring microservice endpoints easy and free of charge](https://medium.com/the-telegraph-engineering/how-prometheus-and-the-blackbox-exporter-makes-monitoring-microservice-endpoints-easy-and-free-of-a986078912ee)
 
-For production use:
+
+## Production use
 
 * Prometheus and the blackbox exporter can be run in multiple hosts (and/or multiple data centers)
 * Alert manager can be run highly availably (they communicate with each other over a mesh protocol to block duplicate alerts)
