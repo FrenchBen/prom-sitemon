@@ -1,9 +1,10 @@
-# Prometheus for Website monitoring [![Build Status](https://travis-ci.org/FrenchBen/prometheus_sitemon.svg)][travis]
-
+# Prometheus for Website monitoring [![Build Status](https://travis-ci.org/FrenchBen/prometheus_sitemon.svg?branch=master)](https://travis-ci.org/FrenchBen/prometheus_sitemon)
 
 Simple example of using prometheus to track website uptime.
 
 [Prometheus](https://prometheus.io) is built in a modular, "microservice" like way.
+
+## Components
 
 This example runs some small docker containers, using docker-compose to wire them together. First, the "real" parts of the stack:
 
@@ -17,6 +18,8 @@ Then there are 3 small app containers that provide a simulation framework:
 * **flakyhost.com**: A web server configured to intermittently fail then come back, so we can see the down/up alerting
 * **reliablehost.com**: A web server which (tries) to always be reliable
 
+## Running this software
+
 To play with this, if you want to also probe some real sites, you can edit the `config/blackbox_target.yml` file and add actual domains as well.
 
 Then, make sure you have [docker-compose](https://docs.docker.com/compose/) (and docker) installed and run
@@ -29,6 +32,8 @@ Then, make sure you have [docker-compose](https://docs.docker.com/compose/) (and
 
     >>> keep an eye on the logs coming out over the alertmanager
     $ tail -f data/alertlogger/alerts.log
+
+## Looking at the metrics
 
 Then go to http://localhost:9090/alerts in your browser to see what, if any hosts are alerting.
 
