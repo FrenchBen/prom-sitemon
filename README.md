@@ -1,4 +1,4 @@
-# Prometheus for Website monitoring [![Build Status](https://travis-ci.org/prometheus/blackbox_exporter.svg)][travis]
+# Prometheus for Website monitoring [![Build Status](https://travis-ci.org/FrenchBen/prometheus_sitemon.svg)][travis]
 
 
 Simple example of using prometheus to track website uptime.
