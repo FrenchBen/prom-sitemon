@@ -2,13 +2,19 @@ language: go
 
 services:
   - docker
-  
-script: 
-  - echo "Tesing & Building FlakyHost code"
-  - cd flakyhost 
-  - go test -v ./...
-  - docker image build --tag flakyhost .
-  - echo "Tesing & Building AlertLogges code"
-  - cd ../alertlogger 
-  - go test -v ./...
-  - docker image build --tag alertlogger .
+
+jobs:
+  include:
+    - stage: build docker images
+      script:
+        - echo "Tesing & Building FlakyHost code"
+        - cd flakyhost 
+        - go test -v ./...
+        - docker image build --tag flakyhost .
+        - echo "Tesing & Building AlertLogger code"
+        - cd ../alertlogger 
+        - go test -v ./...
+        - docker image build --tag alertlogger .
+    # - stage: test services
+    #   script:
+    #     - docker run --rm flakyhost
