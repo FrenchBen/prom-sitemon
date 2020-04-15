@@ -4,8 +4,8 @@ services:
   - docker
 
 before_install:
-  - cd flakyhost && docker image build --tag flakyhost .
-  - cd alertlogger && docker image build --tag alertlogger .
+  - cd flakyhost && docker image build --tag flakyhost . && cd ..
+  - cd alertlogger && docker image build --tag alertlogger . && cd ..
 script: 
-  - cd flakyhost && go test -v ./...
-  - cd alertlogger && go test -v ./...
+  - cd flakyhost && go test -v ./... && cd ..
+  - cd alertlogger && go test -v ./... && cd ..
