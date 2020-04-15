@@ -15,32 +15,32 @@ type AlertManagerData struct {
 	Receiver string `json:"receiver"`
 	Status   string `json:"status"`
 	Alerts   []struct {
-		Status string `json:"status"`
+		Status string `json:"status,omitempty"`
 		Labels struct {
-			Alertname string `json:"alertname"`
-			Instance  string `json:"instance"`
-			Job       string `json:"job"`
-		} `json:"labels"`
+			Alertname string `json:"alertname,omitempty"`
+			Instance  string `json:"instance,omitempty"`
+			Job       string `json:"job,omitempty"`
+		} `json:"labels,omitempty"`
 		Annotations struct {
-			Description string `json:"description"`
-			Summary     string `json:"summary"`
-		} `json:"annotations"`
-		StartsAt     time.Time `json:"startsAt"`
-		EndsAt       time.Time `json:"endsAt"`
-		GeneratorURL string    `json:"generatorURL"`
+			Description string `json:"description,omitempty"`
+			Summary     string `json:"summary,omitempty"`
+		} `json:"annotations,omitempty"`
+		StartsAt     time.Time `json:"startsAt,omitempty"`
+		EndsAt       time.Time `json:"endsAt,omitempty"`
+		GeneratorURL string    `json:"generatorURL,omitempty"`
 	} `json:"alerts"`
 	GroupLabels struct {
 		Alertname string `json:"alertname"`
-	} `json:"groupLabels"`
+	} `json:"groupLabels,omitempty"`
 	CommonLabels struct {
 		Alertname string `json:"alertname"`
 		Instance  string `json:"instance"`
 		Job       string `json:"job"`
-	} `json:"commonLabels"`
+	} `json:"commonLabels,omitempty"`
 	CommonAnnotations struct {
 		Description string `json:"description"`
 		Summary     string `json:"summary"`
-	} `json:"commonAnnotations"`
+	} `json:"commonAnnotations,omitempty"`
 	ExternalURL string `json:"externalURL"`
 	Version     string `json:"version"`
 	GroupKey    string `json:"groupKey"`
