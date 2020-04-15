@@ -2,18 +2,19 @@ version: '3.7'
 
 services:
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.17.1
     # restart: always
     ports:
       - "9090:9090"
     networks:
       - monitoring-network
+      - frontend
     volumes:
       - "./config:/config"
       - "./data/prometheus:/data"
     command: --config.file=/config/prometheus.yml --storage.tsdb.path=/data --storage.tsdb.retention.time=5000h
   blackbox_exporter:
-    image: prom/blackbox-exporter
+    image: prom/blackbox-exporter:v0.16.0
     ports:
       - "9115:9115"
     # dns: 8.8.8.8
@@ -22,9 +23,9 @@ services:
       - "9115:9115"
     volumes:
       - "./config:/config"
-    command: -config.file=/config/blackbox.yml
+    command: --config.file=/config/blackbox.yml
   alertmanager:
-    image: prom/alertmanager
+    image: prom/alertmanager:v0.20.0
     # restart: always
     networks:
       - monitoring-network
@@ -34,6 +35,18 @@ services:
       - "./data/alertmanager:/data"
       - "./config:/config"
     command: --config.file=/config/alertmanager.yml --storage.path=/data
+  alertlogger:
+    build: alertlogger
+    # restart: always
+    networks:
+      - monitoring-network
+    ports:
+      - "9566:8088"
+    environment:
+      - LOG_ALERT_PATH=/data/alerts.log
+    volumes:
+      - "./data/alertlogger:/data"
+  # Fake endpoints
   flakyhost.com:
     environment:
       - HITS_FAIL_COUNT=10
@@ -52,17 +65,6 @@ services:
     # restart: always
     ports:
       - "9568:80"
-  alertlogger:
-    build: alertlogger
-    # restart: always
-    networks:
-      - monitoring-network
-    ports:
-      - "9566:8088"
-    environment:
-      - LOG_ALERT_PATH=/data/alerts.log
-    volumes:
-      - "./data/alertlogger:/data"
 networks:
   frontend:
   monitoring-network:
