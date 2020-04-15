@@ -1,23 +1,23 @@
-version: '2'
+version: '3.7'
+
 services:
   prometheus:
     image: prom/prometheus
-    restart: always
+    # restart: always
     ports:
       - "9090:9090"
-    links:
-      - blackbox_exporter
-      - alertmanager
+    networks:
+      - monitoring-network
     volumes:
       - "./config:/config"
       - "./data/prometheus:/data"
-    command: -config.file=/config/prometheus.yml -storage.local.path=/data -storage.local.retention=5000h -alertmanager.url=http://alertmanager:9093
+    command: --config.file=/config/prometheus.yml --storage.tsdb.path=/data --storage.tsdb.retention.time=5000h
   blackbox_exporter:
     image: prom/blackbox-exporter
     ports:
       - "9115:9115"
-    dns: 8.8.8.8
-    restart: always
+    # dns: 8.8.8.8
+    # restart: always
     ports:
       - "9115:9115"
     volumes:
@@ -25,35 +25,44 @@ services:
     command: -config.file=/config/blackbox.yml
   alertmanager:
     image: prom/alertmanager
-    restart: always
-    links:
-      - alertlogger
+    # restart: always
+    networks:
+      - monitoring-network
     ports:
       - "9093:9093"
     volumes:
       - "./data/alertmanager:/data"
       - "./config:/config"
-    command: -config.file=/config/alertmanager.yml -storage.path=/data
+    command: --config.file=/config/alertmanager.yml --storage.path=/data
   flakyhost.com:
     environment:
       - HITS_FAIL_COUNT=10
     build: flakyhost
-    restart: always
+    # restart: always
+    networks:
+      - frontend
     ports:
       - "9567:80"
   reliablehost.com:
     environment:
       - HITS_FAIL_COUNT=0
     build: flakyhost
-    restart: always
+    networks:
+      - frontend
+    # restart: always
     ports:
       - "9568:80"
   alertlogger:
     build: alertlogger
-    restart: always
+    # restart: always
+    networks:
+      - monitoring-network
     ports:
       - "9566:8088"
     environment:
       - LOG_ALERT_PATH=/data/alerts.log
     volumes:
       - "./data/alertlogger:/data"
+networks:
+  frontend:
+  monitoring-network:

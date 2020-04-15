@@ -3,18 +3,39 @@ global:
   scrape_interval: 15s
 
 rule_files:
-  - "/config/prometheus.rules"
+  - alerts.yaml
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - alertmanager:9093
+  - dns_sd_configs:
+    - names:
+      - 'tasks.alertmanager'
+      type: 'A'
+      port: 9093
 
 scrape_configs:
   - job_name: prometheus
     static_configs:
       - targets: ['localhost:9090']
+  
+  - job_name: 'alertmanager'
+    static_configs:
+      - targets: ['alertmanager:9093']
+  
   - job_name: 'blackbox'
     metrics_path: /probe
+    scrape_interval: 60s
     params:
-      module: [http_2xx]
-    file_sd_configs:
-      - files: ['/config/blackbox_targets.yml']
+      module: [http_2xx] # Look for a HTTP 200 response
+    # file_sd_configs:
+    #   - files: ['/config/blackbox_targets.yml']
+    static_configs:
+      - targets:
+        - flakyhost.com
+        - reliablehost.com
     relabel_configs:
       - source_labels: [__address__]
         regex: (.*)(:80)?

@@ -1,0 +1,15 @@
+groups:
+- name: Availability alerts
+  rules:
+  - alert: Exporter Down
+    expr: up == 0
+    for: 30s
+    labels:
+      severity: warning
+      priority: low
+      #instance: '{{$labels.instance}}'
+      alertdomain: exporter
+    annotations:
+      summary: Exporter {{$labels.job}} is down!
+      description: Exporter on {{ $labels.instance }} is not reachable.
+      console: 'Check the Grafana Dashboard at http://grafana:3000'
