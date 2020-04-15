@@ -8,13 +8,15 @@ services:
       - "9090:9090"
     networks:
       - monitoring-network
-      - frontend
     volumes:
       - "./config:/config"
       - "./data/prometheus:/data"
     command: --config.file=/config/prometheus.yml --storage.tsdb.path=/data --storage.tsdb.retention.time=5000h
   blackbox_exporter:
     image: prom/blackbox-exporter:v0.16.0
+    networks:
+      - monitoring-network
+      - frontend
     ports:
       - "9115:9115"
     # dns: 8.8.8.8
